@@ -1,0 +1,58 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<data xmlns="ns:workflow" xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="ns:workflow resource:WorkflowData">
+    <documentTypes xmlns="ns:workflow/DocumentType" xsi:schemaLocation="ns:workflow/DocumentType resource:DocumentType">
+        <documentType>
+            <name>IO</name>
+            <parent>FP</parent>
+            <label>Internal Order</label>
+            <docHandler>${application.url}/financialInternalOrder.do?methodToCall=docHandler</docHandler>
+            <routePaths>
+                <routePath>
+                    <start name="AdHoc" nextNode="Account"/>  
+                    <requests name="Account" nextNode="Hospitality"/>                                    
+                    <requests name="Hospitality" nextNode="AccountingOrganizationHierarchy"/>
+                    <requests name="AccountingOrganizationHierarchy" nextNode="Subfund"/>
+                    <requests name="Subfund" nextNode="PropertyObjectLevelReviewer"/> 
+                    <requests name="PropertyObjectLevelReviewer" nextNode="FinancialReportingReviewer"/>  
+                    <requests name="FinancialReportingReviewer" nextNode="SPContAcctOverrideReviewer"/> 
+                    <requests name="SPContAcctOverrideReviewer" nextNode="CSContAcctOverrideReviewer"/> 
+                    <requests name="CSContAcctOverrideReviewer" nextNode="InternalSupplier"/>            
+                    <requests name="InternalSupplier" />                                         
+                </routePath>
+            </routePaths>
+            <routeNodes>
+                <start name="AdHoc"/>
+                <role name="Hospitality">
+                    <qualifierResolverClass>org.kuali.rice.kns.workflow.attribute.DataDictionaryQualifierResolver</qualifierResolverClass>
+                </role>                                  
+                <role name="Account">
+                    <qualifierResolverClass>org.kuali.rice.kns.workflow.attribute.DataDictionaryQualifierResolver</qualifierResolverClass>
+                    <activationType>P</activationType>
+                </role>
+                <role name="AccountingOrganizationHierarchy">
+                    <qualifierResolverClass>org.kuali.rice.kns.workflow.attribute.DataDictionaryQualifierResolver</qualifierResolverClass>
+                    <activationType>P</activationType>
+                </role>
+                <role name="Subfund">
+                    <qualifierResolverClass>org.kuali.rice.kns.workflow.attribute.DataDictionaryQualifierResolver</qualifierResolverClass>
+                    <activationType>P</activationType>
+                </role>
+                <role name="InternalSupplier">
+                   <qualifierResolverClass>org.kuali.rice.kns.workflow.attribute.DataDictionaryQualifierResolver</qualifierResolverClass>        
+                </role> 
+                <role name="PropertyObjectLevelReviewer">
+                   <qualifierResolverClass>org.kuali.rice.kns.workflow.attribute.DataDictionaryQualifierResolver</qualifierResolverClass>
+                </role> 
+                <role name="FinancialReportingReviewer">
+                   <qualifierResolverClass>org.kuali.rice.kns.workflow.attribute.DataDictionaryQualifierResolver</qualifierResolverClass>
+                </role> 
+                <role name="SPContAcctOverrideReviewer">
+                   <qualifierResolverClass>org.kuali.rice.kns.workflow.attribute.DataDictionaryQualifierResolver</qualifierResolverClass>
+                </role> 
+                <role name="CSContAcctOverrideReviewer">
+                   <qualifierResolverClass>org.kuali.rice.kns.workflow.attribute.DataDictionaryQualifierResolver</qualifierResolverClass>
+                </role>                                    
+            </routeNodes>
+        </documentType>
+    </documentTypes>
+</data>

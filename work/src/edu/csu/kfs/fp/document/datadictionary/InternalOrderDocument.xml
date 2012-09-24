@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?><beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p" xmlns:dd="http://rice.kuali.org/dd" xsi:schemaLocation="http://www.springframework.org/schema/beans         http://www.springframework.org/schema/beans/spring-beans-2.0.xsd         http://rice.kuali.org/dd         http://rice.kuali.org/dd/dd.xsd">
+
+  <bean id="InternalOrderDocument" parent="InternalOrderDocument-parentBean"/>
+
+  <bean id="InternalOrderDocument-parentBean" abstract="true" parent="AccountingDocumentEntry">
+    <property name="allowsErrorCorrection" value="false"/>
+    <property name="documentTypeName" value="IO"/>
+    <property name="documentClass" value="edu.csu.kfs.fp.document.InternalOrderDocument"/>
+    <property name="businessRulesClass" value="org.kuali.kfs.sys.document.validation.impl.AccountingRuleEngineRuleBase"/>
+    <!--<property name="documentAuthorizerClass" value="org.kuali.kfs.sys.document.authorization.AccountingDocumentAuthorizerBase"/>-->
+    <property name="documentAuthorizerClass" value="edu.csu.kfs.fp.document.authorization.InternalOrderDocumentAuthorizer"/>    
+    <property name="documentPresentationControllerClass" value="edu.csu.kfs.fp.document.authorization.InternalOrderDocumentPresentationController"/>
+    <property name="sessionDocument" value="true"/>
+    <property name="allowsCopy" value="true"/>
+    <property name="attributes">
+          <list>
+              <ref bean="InternalOrder-originalAmount" />
+              <ref bean="InternalOrderDocument-internalSupplierId"/>
+          </list>
+     </property>
+    <property name="workflowAttributes">
+      <ref bean="InternalOrderDocument-workflowAttributes"/>
+    </property>
+
+    <property name="validationMap" ref="InternalOrderDocument-validations"/>
+    <property name="accountingLineGroups">
+    	<map>
+    		<entry>
+    			<key><value>source</value></key>
+	    		<ref bean="InternalOrder-sourceAccountingLineGroup" parent="AccountingLineGroup"/>
+	    	</entry>
+	    	<entry>
+	    		<key><value>target</value></key>
+	    		<ref bean="InternalOrder-targetAccountingLineGroup" parent="AccountingLineGroup"/>
+	    	</entry>
+    	</map>
+    </property>
+    <property name="importedLineParserClass" value="org.kuali.kfs.sys.businessobject.AccountingLineParserBase"/>
+  </bean>
+  
+  <!-- Validations -->
+  
+  <bean id="InternalOrderDocument-validations" parent="InternalOrderDocument-validations-parentBean"/>
+
+  <bean id="InternalOrderDocument-validations-parentBean" class="org.springframework.beans.factory.config.MapFactoryBean">
+  	<property name="sourceMap">
+		<map>
+			<entry>
+				<key><value>org.kuali.kfs.sys.document.validation.event.AttributedRouteDocumentEvent</value></key>
+				<value>InternalOrder-routeDocumentValidation</value>
+			</entry>
+			<entry>
+				<key><value>org.kuali.kfs.sys.document.validation.event.AttributedApproveDocumentEvent</value></key>
+				<value>InternalOrder-approveDocumentValidation</value>
+			</entry>
+			<entry>
+				<key><value>org.kuali.kfs.sys.document.validation.event.AttributedBlanketApproveDocumentEvent</value></key>
+				<value>InternalOrder-blanketApproveDocumentValidation</value>
+			</entry>
+			<entry>
+				<key><value>org.kuali.kfs.sys.document.validation.event.AddAccountingLineEvent</value></key>
+				<value>InternalOrder-addAccountingLineValidation</value>
+			</entry>
+			<entry>
+				<key><value>org.kuali.kfs.sys.document.validation.event.DeleteAccountingLineEvent</value></key>
+				<value>InternalOrder-deleteAccountingLineValidation</value>
+			</entry>
+			<entry>
+				<key><value>org.kuali.kfs.sys.document.validation.event.UpdateAccountingLineEvent</value></key>
+				<value>InternalOrder-updateAccountingLineValidation</value>
+			</entry>
+			<entry>
+				<key><value>org.kuali.kfs.sys.document.validation.event.ReviewAccountingLineEvent</value></key>
+				<value>InternalOrder-reviewAccountingLineValidation</value>
+			</entry>
+    	</map>
+    </property>
+  </bean>
+
+    <bean id="InternalOrder-originalAmount" parent="InternalOrder-originalAmount-parentBean"/>
+
+    <bean id="InternalOrder-originalAmount-parentBean" abstract="true" parent="GenericAttributes-genericAmount">
+        <property name="name" value="originalAmount"/>
+        <property name="label" value="Original Amount"/>
+        <property name="shortLabel" value="Orig. Amount"/>
+    </bean>
+
+    <!-- accounting line groups -->
+    <bean id="InternalOrder-sourceAccountingLineGroup" parent="InternalOrder-sourceAccountingLineGroup-parentBean"/>
+    <bean id="InternalOrder-sourceAccountingLineGroup-parentBean" parent="AccountingLineGroup" abstract="true">
+        <property name="accountingLineView" ref="FinancialProcessing-SalesTax-accountingLineView"/>
+        <property name="accountingLineClass" value="org.kuali.kfs.sys.businessobject.SourceAccountingLine"/>
+        <property name="groupLabel" value="Income"/>
+        <!--<property name="validationPattern">-->
+            <!--<bean parent="FloatingPointValidationPattern" p:allowNegative="false"/>-->
+        <!--</property>-->
+        <property name="accountingLineAuthorizerClass" value="edu.csu.kfs.fp.document.authorization.InternalOrderAccountingLineAuthorizer"/>
+        <!--<property name="accountingLineAuthorizerClass" value="edu.csu.kfs.fp.document.authorization.InternalOrderAccountingLineAuthorizerorizer"/>-->
+        <property name="importedLinePropertyPrefix" value="source"/>
+        <property name="totals" ref="AccountingDocument-sourceGroupTotals"/>
+        <property name="errorKey" value="document.sourceAccounting*,sourceAccountingLines,newSourceLine*"/>
+        <property name="accountingLineGroupClass" value="edu.csu.kfs.fp.document.web.InternalOrderAccoutingLineGroupImpl"/>
+    </bean>
+
+    <bean id="InternalOrder-targetAccountingLineGroup" parent="InternalOrder-targetAccountingLineGroup-parentBean"/>
+    <bean id="InternalOrder-targetAccountingLineGroup-parentBean" parent="AccountingLineGroup" abstract="true">
+        <property name="accountingLineView" ref="FinancialProcessing-SalesTax-accountingLineView"/>
+        <property name="accountingLineClass" value="org.kuali.kfs.sys.businessobject.TargetAccountingLine"/>
+        <property name="groupLabel" value="Expense"/>
+        <!--<property name="validationPattern">-->
+            <!--<bean parent="FloatingPointValidationPattern" p:allowNegative="false"/>-->
+        <!--</property>-->
+        <!--<property name="accountingLineAuthorizerClass" value="org.kuali.kfs.fp.document.authorization.FinancialProcessingAccountingLineAuthorizer"/>-->
+        <!--<property name="accountingLineAuthorizerClass" value="org.kuali.kfs.fp.document.authorization.InternalBillingDocumentAuthorizer"/>-->
+        <property name="accountingLineAuthorizerClass" value="edu.csu.kfs.fp.document.authorization.InternalOrderAccountingLineAuthorizer"/>
+        <!--<property name="accountingLineAuthorizerClass" value="org.kuali.kfs.fp.document.authorization.FinancialProcessingAccountingLineAuthorizer"/>-->
+        <property name="importedLinePropertyPrefix" value="target"/>
+        <property name="totals" ref="AccountingDocument-targetGroupTotals"/>
+        <property name="errorKey" value="document.targetAccounting*,targetAccountingLines,newTargetLine*"/>
+        <property name="accountingLineGroupClass" value="edu.csu.kfs.fp.document.web.InternalOrderAccoutingLineGroupImpl"/>
+    </bean>
+
+    <bean id="InternalOrderDocument-internalSupplierId" parent="InternalOrderDocument-internalSupplierId-parentBean"/>
+    <bean id="InternalOrderDocument-internalSupplierId-parentBean" abstract="true" parent="AttributeDefinition">
+        <!--<bean id="InternalOrder-internalSupplierId-parentBean" abstract="true" parent="edu.csu.kfs.fp.businessobject.InternalSupplier-internalSupplierId">-->
+        <property name="name" value="internalSupplierId"/>
+        <property name="forceUppercase" value="false"/>
+        <property name="label" value="Internal Supplier"/>
+        <property name="shortLabel" value="Int. Sup."/>
+        <property name="maxLength" value="50"/>
+        <property name="validationPattern">
+            <bean parent="AnyCharacterValidationPattern"/>
+        </property>
+        <property name="required" value="true"/>
+        <property name="control">
+            <bean parent="SelectControlDefinition" p:valuesFinderClass="edu.csu.kfs.fp.businessobject.options.InternalSupplierValuesFinder" p:includeKeyInLabel="false"/>
+        </property>
+        <!--<property name="control">--><!--<bean parent="TextControlDefinition" p:size="50"/>--><!--</property>-->
+        <property name="summary" value="&amp;nbsp;"/>
+        <property name="description" value="The Internal Supplier you want to buy stuff from. Select one from the pulldown list."/>
+    </bean>
+
+    <bean id="InternalOrderDocument-workflowAttributes" parent="InternalOrderDocument-workflowAttributes-parentBean"/>
+    <bean id="InternalOrderDocument-workflowAttributes-parentBean" abstract="true" parent="WorkflowAttributes">
+        <property name="routingTypeDefinitions">
+            <map>
+    			<entry key="Hospitality" value-ref="RoutingType-AccountingDocument-Hospitality"/>                
+                <entry key="Account" value-ref="RoutingType-AccountingDocument-Account-targetOnly"/>
+                <entry key="AccountingOrganizationHierarchy" value-ref="RoutingType-AccountingDocument-OrganizationHierarchy-targetOnly"/>
+                <entry key="SubFund" value-ref="RoutingType-AccountingDocument-SubFund-targetOnly"/>
+                <entry key="PropertyObjectLevelReviewer" value-ref="RoutingType-AccountingDocument-PropertyObjectLevel"/>     
+            </map>
+        </property>
+    </bean>
+</beans>

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!--
+    Copyright 2005-2007 The Kuali Foundation.
+    
+    Licensed under the Educational Community License, Version 1.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+    
+    http://www.opensource.org/licenses/ecl1.php
+    
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+-->
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+    <form-beans>
+
+        <!-- Begin required KNS forms -->
+        <!--<form-bean name="KualiForm" type="org.kuali.rice.kns.web.struts.form.KualiForm"/>-->
+        <!-- End required KNS forms -->
+        <form-bean name="InternalOrderForm" type="edu.csu.kfs.fp.document.web.struts.InternalOrderForm"/>
+        <form-bean name="WoaForm" type="edu.csu.kfs.fp.document.web.struts.WoaForm"/>
+        <form-bean name="ProcurementCardForm" type="edu.csu.kfs.fp.document.web.struts.ProcurementCardForm"/>
+        <form-bean name="SingleSidedBudgetAdjustmentForm" type="edu.csu.kfs.fp.document.web.struts.SingleSidedBudgetAdjustmentForm"/>        
+    </form-beans>
+
+    <!--<global-exceptions>-->
+        <!-- Begin required KNS exceptions -->
+        <!--<exception type="java.lang.Throwable" handler="org.kuali.rice.kns.web.struts.pojo.StrutsExceptionIncidentHandler" key="meaningless"/>-->
+        <!-- End required KNS exceptions -->
+    <!--</global-exceptions>-->
+
+    <!--<global-forwards>-->
+        <!-- Begin required KNS forwards -->
+        <!--<forward name="save" path="/index.html" redirect="true"/>-->
+        <!--<forward name="cancel" path="/index.html" redirect="true"/>-->
+        <!--<forward name="close" path="/index.html" redirect="true"/>-->
+        <!--<forward name="portal" path="/index.html" redirect="true"/>-->
+        <!--<forward name="route_report" path="/WEB-INF/jsp/RoutingReportForward.jsp"/>-->
+        <!--<forward name="exceptionIncidentHandler" path="/kr/kualiExceptionIncidentReport.do" contextRelative="true"/>-->
+        <!-- End required KNS forwards -->
+    <!--</global-forwards>-->
+
+    <action-mappings>
+        <!--  Required KNS Action Mappings -->
+        <!--<action path="/portal" name="KualiForm" type="org.kuali.rice.kns.web.struts.action.KualiSimpleAction">-->
+            <!--<forward name="basic" path="/portal.jsp"/>-->
+        <!--</action>-->
+
+        <!--<action path="/index" name="KualiForm" type="org.kuali.rice.kns.web.struts.action.KualiSimpleAction">-->
+            <!--<forward name="basic" path="/portal.jsp"/>-->
+        <!--</action>-->
+        <!--  End Required KNS Action Mappings -->
+
+        <action path="/financialInternalOrder" name="InternalOrderForm" input="/jsp/fp/CashManagement.jsp" type="edu.csu.kfs.fp.document.web.struts.InternalOrderAction" scope="request" parameter="methodToCall" validate="true" attribute="KualiForm">
+            <set-property property="cancellable" value="true"/>
+            <forward name="basic" path="/jsp/fp/InternalOrder.jsp"/>
+        </action>
+
+        <action path="/financialWoa" name="WoaForm" input="/jsp/fp/CashManagement.jsp"
+                type="edu.csu.kfs.fp.document.web.struts.WoaAction" scope="request" parameter="methodToCall"
+                validate="true" attribute="KualiForm">
+            <set-property property="cancellable" value="true"/>
+            <forward name="basic" path="/jsp/fp/Woa.jsp"/>
+        </action>
+
+        <action path="/singleSidedBudgetAdjustment" name="SingleSidedBudgetAdjustmentForm" 
+                type="edu.csu.kfs.fp.document.web.struts.SingleSidedBudgetAdjustmentAction" scope="request" parameter="methodToCall"
+                validate="true" attribute="KualiForm">
+            <set-property property="cancellable" value="true"/>
+            <forward name="basic" path="/jsp/fp/SingleSidedBudgetAdjustment.jsp"/>
+        </action>        
+        
+        <action path="/financialProcurementCard" name="ProcurementCardForm" type="edu.csu.kfs.fp.document.web.struts.ProcurementCardAction" 
+                scope="request" parameter="methodToCall" validate="true" attribute="KualiForm">
+            <set-property property="cancellable" value="true"/>
+            <forward name="basic" path="/jsp/fp/ProcurementCard.jsp"/>
+        </action>         
+
+        <!--  Override the standard purap B2BAction class with ours -->
+        <action path="/b2b" 
+            name="B2BForm" scope="request"
+            attribute="KualiForm" parameter="methodToCall"
+            type="edu.csu.kfs.sciquest.impl.B2BAction">
+
+            <forward name="basic" path="/jsp/module/purap/ShopCatalogs.jsp" />
+            <forward name="removeframe" path="/jsp/module/purap/ShopRemoveFrame.jsp" />
+
+            <forward name="failure" path="/requisition/requisitionFailure.jsp" />
+            <forward name="invalid" path="/requisition/shopFail.jsp" />
+        </action>
+
+    </action-mappings>
+
+    <!--<controller processorClass="org.kuali.rice.kns.web.struts.action.KualiRequestProcessor"/>-->
+    <!--<plug-in className="org.kuali.rice.kns.web.struts.pojo.PojoPlugin"/>-->
+</struts-config>

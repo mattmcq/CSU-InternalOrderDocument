@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="UTF-8"?><!--
+		Copyright 2005-2007 The Kuali Foundation. Licensed under the
+		Educational Community License, Version 1.0 (the "License"); you may
+		not use this file except in compliance with the License. You may
+		obtain a copy of the License at
+
+		http://www.opensource.org/licenses/ecl1.php Unless required by
+		applicable law or agreed to in writing, software distributed under the
+		License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+		CONDITIONS OF ANY KIND, either express or implied. See the License for
+		the specific language governing permissions and limitations under the
+		License. JW Desktop.
+-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+                           http://www.springframework.org/schema/tx
+                           http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
+                           http://www.springframework.org/schema/aop
+                           http://www.springframework.org/schema/aop/spring-aop-2.0.xsd">
+    <bean id="fpModuleConfiguration" parent="rsmartFpModuleConfiguration-parentBean">
+        <property name="packagePrefixes">
+            <list merge="true">
+                <value>edu.csu.kfs.fp</value>
+            </list>
+        </property>
+        <property name="dataDictionaryPackages">
+            <list merge="true">
+                <value>edu/csu/kfs/fp/document/datadictionary</value>
+                <value>edu/csu/kfs/fp/businessobject/datadictionary</value>
+            </list>
+        </property>
+        <property name="databaseRepositoryFilePaths">
+            <list merge="true">
+                <value>edu/csu/kfs/fp/ojb-fp.xml</value>
+            </list>
+        </property>
+        <property name="jobNames">
+            <list merge="true">
+                <value>loadDisbursementVouchersJob</value>
+                <value>pcardNotificationJob</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="spContAcctOverrideRoleTypeService" class="edu.csu.kfs.fp.identity.SPContAcctOverrideRoleTypeServiceImpl">
+        <property name="parameterService">
+            <ref bean="parameterService"/>
+        </property>
+        <property name="documentService">
+            <ref bean="documentService"/>
+        </property>
+    </bean>
+    <bean class="org.kuali.rice.ksb.messaging.KSBExporter">
+        <property name="serviceDefinition">
+            <bean parent="kfsService" p:service-ref="spContAcctOverrideRoleTypeService"
+                  p:localServiceName="spContAcctOverrideRoleTypeService"/>
+        </property>
+    </bean>
+
+    <bean id="csContAcctOverrideRoleTypeService" class="edu.csu.kfs.fp.identity.CSContAcctOverrideRoleTypeServiceImpl">
+        <property name="parameterService">
+            <ref bean="parameterService"/>
+        </property>
+        <property name="documentService">
+            <ref bean="documentService"/>
+        </property>
+    </bean>
+    <bean class="org.kuali.rice.ksb.messaging.KSBExporter">
+        <property name="serviceDefinition">
+            <bean parent="kfsService" p:service-ref="csContAcctOverrideRoleTypeService"
+                  p:localServiceName="csContAcctOverrideRoleTypeService"/>
+        </property>
+    </bean>
+
+    <bean id="campusServiceRoleTypeService" class="edu.csu.kfs.fp.identity.CampusServiceRoleTypeServiceImpl">
+        <property name="parameterService">
+            <ref bean="parameterService"/>
+        </property>
+        <property name="documentService">
+            <ref bean="documentService"/>
+        </property>
+    </bean>
+    <bean class="org.kuali.rice.ksb.messaging.KSBExporter">
+        <property name="serviceDefinition">
+            <bean parent="kfsService" p:service-ref="campusServiceRoleTypeService"
+                  p:localServiceName="campusServiceRoleTypeService"/>
+        </property>
+    </bean>
+
+    <bean id="sponsoredProgramRoleTypeService" class="edu.csu.kfs.fp.identity.SponsoredProgramRoleTypeServiceImpl">
+        <property name="parameterService">
+            <ref bean="parameterService"/>
+        </property>
+        <property name="documentService">
+            <ref bean="documentService"/>
+        </property>
+    </bean>
+    <bean class="org.kuali.rice.ksb.messaging.KSBExporter">
+        <property name="serviceDefinition">
+            <bean parent="kfsService" p:service-ref="sponsoredProgramRoleTypeService"
+                  p:localServiceName="sponsoredProgramRoleTypeService"/>
+        </property>
+    </bean>
+
+    <bean id="hospitalityReviewRoleTypeService" class="edu.csu.kfs.fp.identity.HospitalityReviewRoleTypeServiceImpl"/>
+    <bean class="org.kuali.rice.ksb.messaging.KSBExporter">
+        <property name="serviceDefinition">
+            <bean parent="kfsService" p:service-ref="hospitalityReviewRoleTypeService"
+                  p:localServiceName="hospitalityReviewRoleTypeService"/>
+        </property>
+    </bean>
+    <bean id="internalSupplierRoleTypeService" class="edu.csu.kfs.fp.identity.InternalSupplierRoleTypeServiceImpl"/>
+    <bean class="org.kuali.rice.ksb.messaging.KSBExporter">
+        <property name="serviceDefinition">
+            <bean parent="kfsService" p:service-ref="internalSupplierRoleTypeService"
+                  p:localServiceName="internalSupplierRoleTypeService"/>
+        </property>
+    </bean>
+    <bean id="internalOrderSupplierService" class="edu.csu.kfs.fp.service.impl.InternalOrderSupplierServiceImpl">
+        <property name="businessObjectService">
+            <ref bean="businessObjectService"/>
+        </property>
+    </bean>
+
+    <bean id="propertyObjectLevelReviewRoleTypeService"
+          class="edu.csu.kfs.fp.identity.PropertyObjectLevelReviewRoleTypeServiceImpl">
+        <property name="parameterService">
+            <ref bean="parameterService"/>
+        </property>
+    </bean>
+    <bean class="org.kuali.rice.ksb.messaging.KSBExporter">
+        <property name="serviceDefinition">
+            <bean parent="kfsService" p:service-ref="propertyObjectLevelReviewRoleTypeService"
+                  p:localServiceName="propertyObjectLevelReviewRoleTypeService"/>
+        </property>
+    </bean>
+
+    <bean id="plantObjectLevelReviewRoleTypeService"
+          class="edu.csu.kfs.fp.identity.PlantObjectLevelReviewRoleTypeServiceImpl">
+        <property name="parameterService">
+            <ref bean="parameterService"/>
+        </property>
+    </bean>
+    <bean class="org.kuali.rice.ksb.messaging.KSBExporter">
+        <property name="serviceDefinition">
+            <bean parent="kfsService" p:service-ref="plantObjectLevelReviewRoleTypeService"
+                  p:localServiceName="plantObjectLevelReviewRoleTypeService"/>
+        </property>
+    </bean>    
+
+    <bean id="payrollObjectConsolidationReviewRoleTypeService"
+          class="edu.csu.kfs.fp.identity.PayrollObjectConsolidationReviewRoleTypeServiceImpl">
+        <property name="parameterService">
+            <ref bean="parameterService"/>
+        </property>
+    </bean>
+    <bean class="org.kuali.rice.ksb.messaging.KSBExporter">
+        <property name="serviceDefinition">
+            <bean parent="kfsService" p:service-ref="payrollObjectConsolidationReviewRoleTypeService"
+                  p:localServiceName="payrollObjectConsolidationReviewRoleTypeService"/>
+        </property>
+    </bean>
+
+    <bean id="plantFundReviewRoleTypeService" class="edu.csu.kfs.fp.identity.PlantFundReviewRoleTypeServiceImpl">
+        <property name="parameterService">
+            <ref bean="parameterService"/>
+        </property>
+    </bean>
+    <bean class="org.kuali.rice.ksb.messaging.KSBExporter">
+        <property name="serviceDefinition">
+            <bean parent="kfsService" p:service-ref="plantFundReviewRoleTypeService"
+                  p:localServiceName="plantFundReviewRoleTypeService"/>
+        </property>
+    </bean>
+
+    <bean id="crossDivisionRoleTypeService" class="edu.csu.kfs.fp.identity.CrossDivisionRoleTypeServiceImpl">
+        <property name="parameterService" ref="parameterService"/>
+        <property name="documentService">
+            <ref bean="documentService"/>
+        </property>
+    </bean>
+    <bean class="org.kuali.rice.ksb.messaging.KSBExporter">
+        <property name="serviceDefinition">
+            <bean parent="kfsService" p:service-ref="crossDivisionRoleTypeService"
+                  p:localServiceName="crossDivisionRoleTypeService"/>
+        </property>
+    </bean>
+    
+    <bean id="fundGroupARoleTypeService" class="edu.csu.kfs.fp.identity.FundGroupARoleTypeServiceImpl">
+        <property name="documentService">
+            <ref bean="documentService"/>
+        </property>
+    </bean>
+    <bean class="org.kuali.rice.ksb.messaging.KSBExporter">
+        <property name="serviceDefinition">
+            <bean parent="kfsService" p:service-ref="fundGroupARoleTypeService"
+                  p:localServiceName="fundGroupARoleTypeService"/>
+        </property>
+    </bean> 
+    <bean id="financialReportingRoleTypeService" class="edu.csu.kfs.fp.identity.FinancialReportingRoleTypeServiceImpl">
+        <property name="parameterService" ref="parameterService"/>
+        <property name="documentService" ref="documentService"/>
+    </bean>
+    <bean class="org.kuali.rice.ksb.messaging.KSBExporter">
+        <property name="serviceDefinition">
+            <bean parent="kfsService" p:service-ref="financialReportingRoleTypeService"
+                  p:localServiceName="financialReportingRoleTypeService"/>
+        </property>
+    </bean>
+
+    <bean id="internalSupplierService" class="edu.csu.kfs.fp.service.impl.InternalSupplierServiceImpl">
+        <property name="businessObjectService">
+            <ref bean="businessObjectService"/>
+        </property>
+    </bean>
+
+
+
+    
+    <bean id="woaSupplierRoleTypeService" class="edu.csu.kfs.fp.identity.WoaSupplierRoleTypeServiceImpl">
+        <property name="businessObjectService" ref="businessObjectService"/>
+        <property name="documentService" ref="documentService"/>
+    </bean>
+    <bean class="org.kuali.rice.ksb.messaging.KSBExporter">
+        <property name="serviceDefinition">
+            <bean parent="kfsService" p:service-ref="woaSupplierRoleTypeService"
+                  p:localServiceName="woaSupplierRoleTypeService"/>
+        </property>
+    </bean>
+
+    <bean id="fyiRoleTypeService" class="edu.csu.kfs.fp.identity.FyiRoleTypeServiceImpl">
+    </bean>
+    <bean class="org.kuali.rice.ksb.messaging.KSBExporter">
+        <property name="serviceDefinition">
+            <bean parent="kfsService" p:service-ref="fyiRoleTypeService"
+                  p:localServiceName="fyiRoleTypeService"/>
+        </property>
+    </bean>
+
+    <bean id="debitDeterminerService" class="edu.csu.kfs.fp.document.service.impl.DebitDeterminerServiceImpl">
+        <property name="optionsService">
+            <ref bean="optionsService"/>
+        </property>
+        <property name="accountingDocumentRuleUtils">
+            <ref bean="accountingDocumentRuleHelperService"/>
+        </property>
+    </bean>
+
+    <bean id="InternalOrder-documentBalancedValidation"
+          class="edu.csu.kfs.fp.document.validation.impl.InternalOrderDocumentBalancedValidation" abstract="true"/>
+
+    <bean id="InternalOrder-documentOverToleranceValidation"
+          class="edu.csu.kfs.fp.document.validation.impl.InternalOrderDocumentOverToleranceValidation" abstract="true"/>
+
+    <bean id="NonCheckDisbursement-documentAmountValidation"
+          class="edu.csu.kfs.fp.document.validation.impl.NonCheckDisbursementDocumentAmountValidation" abstract="true"/>
+
+
+    <bean id="procurementCardCreateDocumentService" class="edu.csu.kfs.fp.batch.service.impl.ProcurementCardCreateDocumentServiceImpl">
+        <property name="parameterService">
+            <ref bean="parameterService"/>
+        </property>
+        <property name="businessObjectService">
+            <ref bean="businessObjectService"/>
+        </property>
+        <property name="documentService">
+            <ref bean="documentService"/>
+        </property>
+        <property name="dataDictionaryService">
+            <ref bean="dataDictionaryService"/>
+        </property>
+        <property name="dateTimeService">
+            <ref bean="dateTimeService"/>
+        </property>
+        <property name="workflowDocumentService">
+            <ref bean="workflowDocumentService"/>
+        </property>
+        <property name="accountingLineRuleUtil">
+            <ref bean="accountingLineRuleHelperService"/>
+        </property>
+        <property name="capitalAssetBuilderModuleService">
+            <ref bean="capitalAssetBuilderModuleService"/>
+        </property>
+    </bean>
+
+    <bean id="PcardNotificationService" class="edu.csu.kfs.fp.batch.service.impl.PcardNotificationServiceImpl">
+        <property name="businessObjectService">
+            <ref bean="businessObjectService"/>
+        </property>
+        <property name="mailService">
+            <ref bean="mailService"/>
+        </property>
+    </bean>
+
+    <bean id="pcardNotificationStep" class="edu.csu.kfs.fp.batch.PcardNotificationStep" parent="step">
+    </bean>
+
+    <bean id="pcardNotificationJob" parent="scheduledJobDescriptor">
+        <property name="steps">
+            <list>
+                <ref bean="pcardNotificationStep"/>
+            </list>
+        </property>
+    </bean>
+
+    <!-- validations -->
+    <import resource="document/validation/configuration/InternalOrderValidation.xml"/>
+    <import resource="document/validation/configuration/InternalBillingValidation.xml"/>    
+    <import resource="document/validation/configuration/WoaValidation.xml"/>
+    <import resource="document/validation/configuration/DisbursementVoucherValidation.xml"/>
+    <import resource="document/validation/configuration/ProcurementCardValidation.xml" />
+    <import resource="document/validation/configuration/NonCheckDisbursementValidation.xml" />
+    <import resource="document/validation/configuration/SingleSidedBudgetAdjustmentValidation.xml" />
+
+
+</beans>

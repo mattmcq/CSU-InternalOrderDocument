@@ -1,0 +1,105 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:p="http://www.springframework.org/schema/p"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+
+  <bean id="InternalOrderSupplier" parent="InternalOrderSupplier-parentBean" />
+
+  <bean id="InternalOrderSupplier-parentBean" abstract="true" parent="BusinessObjectEntry">
+    <property name="businessObjectClass" value="edu.csu.kfs.fp.businessobject.InternalOrderSupplier" />
+    <property name="objectLabel" value="Internal Order Supplier" />
+    <property name="attributes" >
+      <list>
+        <ref bean="InternalOrderSupplier-documentNumber" />      
+        <ref bean="InternalOrderSupplier-internalSupplierId" />
+        <ref bean="InternalOrderSupplier-nextExpenseNumber" />
+        <ref bean="InternalOrderSupplier-nextIncomeNumber" />
+        <ref bean="InternalOrderSupplier-nextItemNumber" />
+        <ref bean="InternalOrderSupplier-postingYear" />
+      </list>
+    </property>
+  </bean>
+
+<!-- Attribute Definitions -->
+
+  <bean id="InternalOrderSupplier-documentNumber" parent="InternalOrderSupplier-documentNumber-parentBean" />
+
+  <bean id="InternalOrderSupplier-documentNumber-parentBean" abstract="true" parent="AttributeDefinition">
+    <property name="name" value="documentNumber" />
+    <property name="forceUppercase" value="true" />
+    <property name="label" value="Document Number" />
+    <property name="shortLabel" value="Description" />
+    <property name="maxLength" value="14" />
+    <property name="control" >
+      <bean parent="TextControlDefinition"
+            p:size="14" />
+    </property>
+  </bean>
+  <bean id="InternalOrderSupplier-internalSupplierId" parent="InternalOrderSupplier-internalSupplierId-parentBean" />
+
+  <bean id="InternalOrderSupplier-internalSupplierId-parentBean" abstract="true" parent="AttributeDefinition">
+    <property name="name" value="internalSupplierId" />
+    <property name="forceUppercase" value="true" />
+    <property name="label" value="Supplier Id" />
+    <property name="shortLabel" value="Description" />
+    <property name="maxLength" value="6" />
+    <property name="control" >
+      <bean parent="TextControlDefinition"
+            p:size="6" />
+    </property>
+  </bean>
+  <bean id="InternalOrderSupplier-nextExpenseNumber" parent="InternalOrderSupplier-nextExpenseNumber-parentBean" />
+
+  <bean id="InternalOrderSupplier-nextExpenseNumber-parentBean" abstract="true" parent="AttributeDefinition">
+    <property name="name" value="nextExpenseNumber" />
+    <property name="forceUppercase" value="true" />
+    <property name="label" value="Next Exp Number" />
+    <property name="shortLabel" value="Description" />
+    <property name="maxLength" value="7" />
+    <property name="control" >
+      <bean parent="TextControlDefinition"
+            p:size="7" />
+    </property>
+  </bean>
+  <bean id="InternalOrderSupplier-nextIncomeNumber" parent="InternalOrderSupplier-nextIncomeNumber-parentBean" />
+
+  <bean id="InternalOrderSupplier-nextIncomeNumber-parentBean" abstract="true" parent="AttributeDefinition">
+    <property name="name" value="nextIncomeNumber" />
+    <property name="forceUppercase" value="true" />
+    <property name="label" value="Next Inc Number" />
+    <property name="shortLabel" value="Description" />
+    <property name="maxLength" value="7" />
+    <property name="control" >
+      <bean parent="TextControlDefinition"
+            p:size="7" />
+    </property>
+  </bean> 
+  <bean id="InternalOrderSupplier-nextItemNumber" parent="InternalOrderSupplier-nextItemNumber-parentBean" />
+
+  <bean id="InternalOrderSupplier-nextItemNumber-parentBean" abstract="true" parent="AttributeDefinition">
+    <property name="name" value="nextItemNumber" />
+    <property name="forceUppercase" value="true" />
+    <property name="label" value="Next Item Number" />
+    <property name="shortLabel" value="Description" />
+    <property name="maxLength" value="7" />
+    <property name="control" >
+      <bean parent="TextControlDefinition"
+            p:size="7" />
+    </property>
+  </bean> 
+  <bean id="InternalOrderSupplier-postingYear" parent="InternalOrderSupplier-postingYear-parentBean" />
+
+  <bean id="InternalOrderSupplier-postingYear-parentBean" abstract="true" parent="AttributeDefinition">
+    <property name="name" value="postingYear" />
+    <property name="forceUppercase" value="true" />
+    <property name="label" value="Posting Year" />
+    <property name="shortLabel" value="Description" />
+    <property name="maxLength" value="4" />
+    <property name="control" >
+      <bean parent="TextControlDefinition"
+            p:size="4" />
+    </property>
+  </bean>        
+
+</beans>
